@@ -1,0 +1,79 @@
+.col-xs-12
+	.row
+		.block-header.flex-space-between.flex-vertical-centered.flex-wrap
+			h2 {{companyinfo.name}}
+
+	// upper context menu
+	a.btn.btn-app(target='_self', href='#', data-toggle='modal', data-target='#addhub')
+		i.mdi.mdi-plus-box
+		|	  Add new Hub
+	p
+		
+p This is the Hub's list attached to your company
+// Hub table
+.col-xs-12
+	.table-responsive
+		table.table.table-striped
+			thead
+			tr
+				th.column-title ID
+				th.column-title Hub name
+				th.column-title Type
+				th.column-title Status
+				th.column-title(style='text-align: center;') Actions
+			tbody
+				tr(ng-repeat='hub in hubsList')
+					td {{hub.resourceId}}
+					td {{hub.resourceName}}
+					td {{hub.conceptName}}
+					td(align='center')
+						div(ng-if="isConnected(hub.properties) == 'connected'")
+							p.btn.btn-success.btn-xs
+								i.mdi.mdi-link-variant
+						div(ng-if="isConnected(hub.properties) == 'disconnected'")
+							p.btn.btn-default.btn-xs
+								i.mdi.mdi-link-variant-off
+					td(align='center')
+						a.btn.btn-warning.btn-xs(ui-sref='rmui.resources({companyid: {{companyinfo.id}}, hubid: {{hub.resourceId}}})')
+							i.mdi.mdi-table-edit
+							|  Edit
+						a.btn.btn-primary.btn-xs(ui-sref='rmui.resources({companyid: companyinfo.id, hubid: hub.resourceId})')
+							i.mdi.mdi-sitemap
+							|  Resources
+						a.btn.btn-info.btn-xs(ui-sref='rmui.hubproperties({companyid: companyinfo.id, hubid: hub.resourceId})')
+							i.mdi.mdi-settings
+							|  Properties
+						a.btn.btn-danger.btn-xs(ng-click='deleteHub($index)')
+							i.mdi.mdi-delete
+							|  Delete
+include simoes.html
+// add new hub modal
+#addhub.modal.fade(tabindex='-1', role='form', aria-hidden='true', align='left')
+	.modal-dialog.modal-lg
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+				h4#addproperty.modal-title Add new Hub
+			.modal-body
+				// Form
+				form#addpropertyform.form-horizontal.form-label-left(data-parsley-validate='', ng-submit='createHub()')
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newhubname')
+							| Hub Name 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							input#hubname.form-control.col-md-7.col-xs-12(type='text', required='', ng-model='newhubname')
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newhubtype')
+							| Hub Type 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							select.select2_group.form-control(ng-model='newhubtype', ng-options='types.conceptName group by types.parentName for types in hubtypes')
+					.ln_solid
+					.form-group
+						.col-md-6.col-sm-6.col-xs-12.col-md-offset-3
+							button.btn.btn-primary(type='submit', ng-click='resetFormNewHub()', data-dismiss='modal') Cancel
+							button.btn.btn-success(type='submit') Add
+				// /Form
+// /add new hub modal

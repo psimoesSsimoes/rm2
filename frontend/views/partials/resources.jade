@@ -1,0 +1,129 @@
+.col-xs-12
+	.row
+		.block-header.flex-space-between.flex-vertical-centered.flex-wrap
+			h2 
+				a(ui-sref='rmui.company({companyid: companyinfo.id})') {{companyinfo.name}}
+				|  / {{hubinfo.name}}
+	p Hub Resource control panel 
+		small  select your option
+
+	
+	// upper context menu
+	a.btn.btn-app(target='_self', href='#', data-toggle='modal', data-target='#addresource')
+		i.mdi.mdi-plus-box
+		|	  Add new Resource
+	a.btn.btn-app(target='_self', href='#', data-toggle='modal', data-target='#viewconfig')
+		i.mdi.mdi-eye
+		|  View Hub Configuration
+	a.btn.btn-app(ng-click='sendConfigModal()')
+		span.badge.bg-red(ng-if="hubinfo.configStatus == 'false'") Needed
+		span.badge.bg-green(ng-if="hubinfo.configStatus == 'true'")
+		i.fa.fa-check
+		i.mdi.mdi-upload
+		|  Upload Configuration
+
+// resources table
+.col-xs-12
+	.table-responsive
+		table.table.table-striped
+			thead
+			tr
+				th.column-title ID
+				th.column-title Resource Name
+				th.column-title Type
+				th.column-title(style='text-align: center;') Actions
+			tbody
+				tr(ng-repeat='resource in resourcesList')
+					td {{resource.resourceId}}
+					td {{resource.resourceName}}
+					td {{resource.conceptName}}
+					td(align='center')
+						a.btn.btn-info.btn-xs(ui-sref='rmui.resourceproperties({companyid: companyinfo.id, hubid: hubinfo.id, resourceid: resource.resourceId})')
+							i.mdi.mdi-settings
+							|  Properties
+						a.btn.btn-danger.btn-xs(type='button', data-toggle='modal', data-backdrop='false', data-target='#_{{$index}}_del')
+							i.mdi.mdi-delete
+							|  Delete
+						// Delete confirmation dialog
+						.modal.fade(id='_{{$index}}_del')
+							.modal-dialog
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+										h4.modal-title {{resource.resourceName}}
+									.modal-body
+										p Are you sure you want to delete this resource?
+									.modal-footer
+										button.btn.btn-default(type='button', data-dismiss="modal") Cancel
+										button.btn.btn-primary(type='button', ng-click='deleteResource($index)') Yes
+// /resources table
+
+
+// view config modal
+#viewconfig.modal.fade(tabindex='-1', role='form', aria-hidden='true', align='left')
+	.modal-dialog.modal-lg
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+				h4#viewconfig.modal-title Hub configuration
+			.modal-body
+				// Form
+				form#viewconfigform.form-horizontal.form-label-left(data-parsley-validate='', ng-submit='sendConfigModal()')
+				.form-group
+					label.control-label.col-md-6.col-sm-0.col-xs-1(for='configuration')
+						| Configuration Parameters 
+						span.required *	
+					textarea#configuration.form-control.ng-binding(required='', form='viewconfigform', ng-model='uglyconfiguration',rows="15")
+
+				.ln_solid
+				.form-group
+						button.btn.btn-primary(type='submit', ng-click='cancelViewconfig()', data-dismiss='modal') Cancel
+						button.btn.btn-success(type='submit', ng-disabled='isConfigurationChanged()') Upload
+						button.btn.btn-warning(ng-click='valJSON()', ng-hide='!isConfigurationChanged()') Check format
+				// /Form
+// /view config modal
+
+// send config confirmation dialog
+.modal.fade(id='sendconfigmodal')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+				h4.modal-title Configuration Upload
+			.modal-body
+				p Are you sure you want to proceed?
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss="modal") Cancel
+				button.btn.btn-primary(type='button', ng-click='confirmSendConfig()') Yes
+
+// add new resource modal
+#addresource.modal.fade(tabindex='-1', role='form', aria-hidden='true', align='left')
+	.modal-dialog.modal-lg
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+				h4#addproperty.modal-title Add new Resource
+			.modal-body
+				// Form
+				form#addresourceform.form-horizontal.form-label-left(data-parsley-validate='', ng-submit='createResource()')
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newresourcename')
+							| Resource Name 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							input#resourcename.form-control.col-md-7.col-xs-12(type='text', required='', ng-model='newresourcename')
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newresourcetype')
+							| Resource Type 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							select.form-control(ng-model='newresourcetype', ng-options='types.conceptName for types in resourcetypes')
+					.ln_solid
+					.form-group
+						.col-md-6.col-sm-6.col-xs-12.col-md-offset-3
+							button.btn.btn-primary(type='submit', ng-click='resetFormNewResource()', data-dismiss='modal') Cancel
+							button.btn.btn-success(type='submit') Add
+				// /Form
+// /add new resource modal

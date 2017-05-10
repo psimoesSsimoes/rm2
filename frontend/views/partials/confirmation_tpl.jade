@@ -1,0 +1,11 @@
+.modal.fade(id='{{confirmationId}}')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', ng-click='close(false)', data-dismiss='modal', aria-hidden='true') ×
+				h4.modal-title {{confirmationTitle}}
+			.modal-body
+				p {{confirmationBody}}
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss="modal") Cancel
+				button.btn.btn-primary(type='button', data-ng-click='successCallback(); $event.stopPropagation()') Ok

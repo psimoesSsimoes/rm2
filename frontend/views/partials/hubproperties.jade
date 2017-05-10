@@ -1,0 +1,124 @@
+.col-xs-12
+	.row
+		.block-header.flex-space-between.flex-vertical-centered.flex-wrap
+			h2 
+				a(ui-sref='rmui.company({companyid: companyinfo.id})') {{companyinfo.name}}
+				|  / {{hubinfo.name}}
+	p Hub Properties control panel
+		small select your option
+	
+	// upper context menu
+	a.btn.btn-app(target='_self', href='#', data-toggle='modal', data-target='#addproperty')
+		i.mdi.mdi-plus-box
+		|	  Add new Property
+
+.col-xs-12
+	.table-responsive
+		// Properties table
+		table.table.table-striped.jambo_table.bulk_action
+			thead
+				tr.headings
+					th.column-title ID
+					th.column-title Property name
+					th.column-title Type
+					th.column-title(style='text-align: center;') Actions
+			tbody
+				tr.even.pointer(ng-repeat='property in propertiesList')
+					td {{property.resourceId}}
+					td {{property.resourcePropertyName}}
+					td {{property.type}}
+					td(align='center')
+						button.btn.btn-warning.btn-xs(type='button', data-toggle='modal', data-backdrop='false', data-target='#_{{$index}}_edit')
+							i.mdi.mdi-settings
+							|  Edit
+						// Edit Property Modal
+						.modal.fade(id='_{{$index}}_edit', tabindex='-1', role='form', aria-hidden='true', align='left')
+							.modal-dialog.modal-lg
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal')
+											span(aria-hidden='true') ×
+										h4.modal-title(id='{{$index}}_edit') {{property.resourcePropertyName}}
+									.modal-body
+										// Form
+										form.form-horizontal.form-label-left(id='hubpropertyform{{$index}}', data-parsley-validate='', ng-submit='editProperty($index)')
+											.form-group
+												label.control-label.col-md-3.col-sm-3.col-xs-12(for='propertyname')
+													| Property Name
+												.col-md-6.col-sm-6.col-xs-12
+													input#propertyname.form-control.col-md-7.col-xs-12(type='text', disabled='', required='', ng-model='propertiesList[$index].resourcePropertyName')
+											.form-group
+												label.control-label.col-md-3.col-sm-3.col-xs-12(for='propertyvalue')
+													| Property Value 
+													span.required *
+												.col-md-6.col-sm-6.col-xs-12
+													textarea#propertyvalue.form-control.ng-binding(required='', form='hubpropertyform{{$index}}', ng-model='propertiesList[$index].value') {{property.value}}
+											.ln_solid
+											.form-group
+												.col-md-6.col-sm-6.col-xs-12.col-md-offset-3
+													button.btn.btn-primary(type='submit', ng-click='resetForm()', data-dismiss='modal') Cancel
+													button.btn.btn-success(type='submit', ng-disabled='!isPropertyChanged()') Save changes
+										// /Form
+						// /Edit Property Modal
+						a.btn.btn-danger.btn-xs(type='button', data-toggle='modal', data-backdrop='false', data-target='#_{{$index}}_del')
+							i.mdi.mdi-delete
+							|  Delete
+						// Delete confirmation dialog
+						.modal.fade(id='_{{$index}}_del')
+							.modal-dialog
+								.modal-content
+									.modal-header
+										button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+										h4.modal-title {{property.resourcePropertyName}}
+									.modal-body
+										p Are you sure you want to delete this property?
+									.modal-footer
+										button.btn.btn-default(type='button', data-dismiss="modal") Cancel
+										button.btn.btn-primary(type='button', ng-click='deleteProperty($index)') Yes
+		// /Properties table
+
+
+
+
+
+// add new property modal
+#addproperty.modal.fade(tabindex='-1', role='form', aria-hidden='true', align='left')
+	.modal-dialog.modal-lg
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden='true') ×
+				h4#addproperty.modal-title Add new property
+			.modal-body
+				// Form
+				form#addpropertyform.form-horizontal.form-label-left(data-parsley-validate='', ng-submit='createProperty()')
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newpropertyname')
+							| Property Name 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							input#propertyname.form-control.col-md-7.col-xs-12(type='text', required='', ng-model='newpropertyname')
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newpropertytype')
+							| Property Type 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							select.form-control(ng-model='newpropertytype', ng-options='x for x in propertytypes')
+							// input type="text" id="propertyname" disabled required class="form-control col-md-7 col-xs-12" ng-model="newpropertytype"
+					.form-group
+						label.control-label.col-md-3.col-sm-3.col-xs-12(for='newpropertyvalue')
+							| Property Value 
+							span.required *
+						.col-md-6.col-sm-6.col-xs-12
+							textarea#propertyvalue.form-control.ng-binding(required='', form='addpropertyform', ng-model='newpropertyvalue') {{property.value}}
+					.ln_solid
+					.form-group
+						.col-md-6.col-sm-6.col-xs-12.col-md-offset-3
+							button.btn.btn-primary(type='submit', ng-click='resetFormNewProperty()', data-dismiss='modal') Cancel
+							button.btn.btn-success(type='submit') Add
+				// /Form
+// /add new property modal
+
+
+
+

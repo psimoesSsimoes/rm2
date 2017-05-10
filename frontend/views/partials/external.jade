@@ -1,0 +1,26 @@
+.col-xs-12
+	.row
+		.block-header.flex-space-between.flex-vertical-centered.flex-wrap
+			h2 
+				a(ui-sref='rmui.company({companyid: companyinfo.id})') {{companyinfo.name}}
+				|  / 
+				a(ui-sref='rmui.resources({companyid: companyinfo.id, hubid: hubinfo.id})') {{hubinfo.name}}
+				| / 
+				a(ui-sref='rmui.resourceproperties({companyid: companyinfo.id, hubid: hubinfo.id, resourceid: resourceinfo.id})') {{resourceinfo.name}}
+	p Resource Properties control panel
+		small select your option
+
+// Submit confirmation dialog
+.modal.fade(id='submit')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+				h4.modal-title Confirmation
+			.modal-body
+				p Are you sure you want to proceed?
+			.modal-footer
+				button.btn.btn-default(type='button', data-dismiss="modal") Cancel
+				button.btn.btn-primary(type='button', ng-click='submitExternal()') Yes
+
+div(ng-bind-html='htmlString', compile-template='')

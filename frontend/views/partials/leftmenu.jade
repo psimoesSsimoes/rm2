@@ -1,0 +1,19 @@
+.controlcenter-sidebar
+  ul.nav.nav-pills.nav-stacked
+    .listview
+      .lv-body
+        .lv-item.clickable.menu-heading(ui-sref="rmui")
+          i.mdi.mdi-settings
+          .menu-title #{__('Resource Manager')}
+    hr
+    .listview
+      .lv-body
+        a.lv-item.menu-item(ui-sref=".companies")
+          i.mdi.mdi-sitemap
+          .menu-title Companies
+        a.lv-item.menu-item(ui-sref=".hw")
+          i.mdi.mdi-music-circle
+          .menu-title sref HW Module
+        a.lv-item.menu-item(href="/#/helloworld")
+          i.mdi.mdi-music-circle
+          .menu-title href HW Module

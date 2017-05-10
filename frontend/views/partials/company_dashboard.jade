@@ -1,0 +1,34 @@
+// Chart.js
+script(src='node_modules/chart.js/Chart.min.js')
+// Angular Chart js
+script(src='node_modules/angular-chart.js/dist/angular-chart.min.js')
+
+.col-xs-12
+	.row
+		.block-header.flex-space-between.flex-vertical-centered.flex-wrap
+			h2 {{companyinfo.name}}
+	p Dashboard
+		small   select your option
+	a.btn.btn-app(target='_self', ui-sref='rmui.company({companyid: companyinfo.id})', data-toggle='modal')
+		i.mdi.mdi-sitemap
+		|	  Hubs
+	p
+
+	.panel.panel-default
+		.panel-heading Connection Ratio Status
+		.panel-body
+			canvas#doughnut.chart.chart-doughnut(chart-data='data', chart-labels='labels')
+
+	.panel.panel-default
+		.panel-heading Measures Of Temperature Sensors
+		.panel-body
+			canvas#base.chart-bubble(chart-data='dataBubble', chart-series='seriesBubble')
+
+p statuslabels  {{statuslabels}}
+p hubtypes  {{hubtypes}}
+p hubsList  {{hubsList}}
+p resourcesList {{resourcesList}}
+p seriesBubble {{seriesBubble}}
+p dataBubble {{dataBubble}}
+
+

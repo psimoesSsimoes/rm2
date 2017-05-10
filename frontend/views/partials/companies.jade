@@ -1,0 +1,23 @@
+.col-xs-12
+	.row
+		.block-header.flex-space-between.flex-vertical-centered.flex-wrap
+			h2 #{__('Companies List')}
+	p Select your Company
+table.table.table-striped
+	thead
+		tr
+			th ID
+			th Company Name
+			th Actions
+	tbody
+		tr(ng-repeat='company in companiesList')
+			td {{company.resourceId}}
+			td {{company.resourceName}}
+			td
+				a(ui-sref='rmui.companydashboard') Dashboard
+			td
+				a(ui-sref='rmui.company({companyid: company.resourceId})') Hubs
+
+
+
+
