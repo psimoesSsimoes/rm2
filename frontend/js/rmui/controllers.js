@@ -195,7 +195,6 @@ angular.module('uninova.rm.2')
                         })
                 })
         }
-
         //add new hub scope
         $scope.newhubname = "";
         $scope.newhubtype = "";
@@ -216,7 +215,7 @@ angular.module('uninova.rm.2')
                 }
             })
         })
-
+	console.log($scope.hubtypes);
         //resetFormNewHub() = cancel button
         $scope.resetFormNewHub = function() {
                 $scope.newhubname = "";
@@ -278,6 +277,29 @@ angular.module('uninova.rm.2')
                 //console.log("status out: " + status)
                 return status
         }
+	// preencher scope.company retornando jc com 
+	// informacao sobre a companhia, hubs, resources, propriedades
+	// preencher scope.company retornando jc com 
+	// informacao sobre a companhia, hubs, resources, propriedades
+	$scope.atum = function(){
+		var j_c={};
+		console.log();
+		j_c.name = $scope.companyinfo.name;
+		j_c.type = "comp";
+		j_c.children = $scope.hubsList.map(function traverse(o ) {
+				console.log(o.resourceName);
+            	for(var j in o.properties){
+					console.log(o.properties[j].resourcePropertyName);
+				}
+				        
+    			}
+		 
+			
+		)
+		return j_c;
+		
+	}
+	
 	
 	$scope.company = {
                 name: "Flexfelina",
