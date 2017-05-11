@@ -215,7 +215,6 @@ angular.module('uninova.rm.2')
                 }
             })
         })
-	console.log($scope.hubtypes);
         //resetFormNewHub() = cancel button
         $scope.resetFormNewHub = function() {
                 $scope.newhubname = "";
@@ -277,6 +276,18 @@ angular.module('uninova.rm.2')
                 //console.log("status out: " + status)
                 return status
         }
+/**	
+	$scope.AllResources = function() {
+	    console.log($scope.hubsList.length);
+	    for (var i = 0 i< $scope.hubsList.length;i++){
+		console.log("Atum");
+            	resourceService.getResource($scope.hubsList[i].resourceId).then(function(message) {
+                    $scope.resourcesList = message.data.data;
+            });
+		}
+    	}*/
+
+
 	// preencher scope.company retornando jc com 
 	// informacao sobre a companhia, hubs, resources, propriedades
 	// preencher scope.company retornando jc com 
@@ -288,6 +299,11 @@ angular.module('uninova.rm.2')
 		j_c.type = "comp";
 		j_c.children = $scope.hubsList.map(function traverse(o ) {
 				console.log(o.resourceName);
+				console.log(o.resourceId);
+			resourceService.getResources(o.resourceId).then(function(message) {
+                    console.log(message.data.data);
+            });
+
             	for(var j in o.properties){
 					console.log(o.properties[j].resourcePropertyName);
 				}
