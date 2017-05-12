@@ -4,7 +4,6 @@ console.log("RMUI: Loading controller.js");
 angular.module('uninova.rm.2')
 .controller('testController', function($scope, $stateParams, testService) {
 	console.log("RMUI: testController");
-	$scope.company = "a minha empresa";
 	testService.getHub(2).then(function(message) {
                 $scope.hubinfo = { id: 2, name: message.data.data[0].resourceName };
         });
@@ -202,6 +201,7 @@ angular.module('uninova.rm.2')
         //insert selected company in scope
         companyService.getCompany().then(function(message){
                 $scope.companyinfo = { id: $stateParams.companyid, name: message.data.data[0].resourceName };
+	
         });
 
         getAllHubs();
@@ -215,6 +215,58 @@ angular.module('uninova.rm.2')
                 }
             })
         })
+
+	// preencher scope.company retornando jc com 
+	// informacao sobre a companhia, hubs, resources, propriedades
+	// preencher scope.company retornando jc com 
+	// informacao sobre a companhia, hubs, resources, propriedades
+	$scope.company= function(){
+		var j_c={};
+		j_c.name = $scope.companyinfo.name;
+		j_c.type = "comp";
+		j_c.children = [];
+                $scope.hubsList.map(function traverse(o ) {
+			var n_o = {};
+			n_o.name =o.resourceName;
+			n_o.type = "hub";
+			n_o.children = [];
+			for(var j in o.properties){
+				var c_c = {};
+					c_c.name =o.properties[j].resourcePropertyName;
+					c_c.type="prop";
+				n_o.children.push(c_c);
+				}
+				
+			resourceService.getResources(o.resourceId).then(function(message) {
+			    //resources of hub. this is an array
+			    for(var i = 0; i< message.data.data.length;i++){
+			    var c_f = {};
+			    c_f.name=message.data.data[i].resourceName;
+			    c_f.type="rec";
+			    c_f.children = [];
+			    resourceService.getProperties(message.data.data[i].resourceId).then(function(m){
+
+	
+	for(var j = 0; j < m.data.data.length ; j++){
+		var c_g = {};
+		c_g.name=m.data.data[j].resourcePropertyName;
+		c_g.type="prop";
+		c_f.children.push(c_g);
+	}
+})
+	n_o.children.push(c_f);	
+}
+j_c.children.push(n_o);		     
+            });
+
+            	        
+    			}
+		 
+			
+		)
+		return j_c;
+		
+	}
         //resetFormNewHub() = cancel button
         $scope.resetFormNewHub = function() {
                 $scope.newhubname = "";
@@ -276,47 +328,9 @@ angular.module('uninova.rm.2')
                 //console.log("status out: " + status)
                 return status
         }
+	
+
 /**	
-	$scope.AllResources = function() {
-	    console.log($scope.hubsList.length);
-	    for (var i = 0 i< $scope.hubsList.length;i++){
-		console.log("Atum");
-            	resourceService.getResource($scope.hubsList[i].resourceId).then(function(message) {
-                    $scope.resourcesList = message.data.data;
-            });
-		}
-    	}*/
-
-
-	// preencher scope.company retornando jc com 
-	// informacao sobre a companhia, hubs, resources, propriedades
-	// preencher scope.company retornando jc com 
-	// informacao sobre a companhia, hubs, resources, propriedades
-	$scope.atum = function(){
-		var j_c={};
-		console.log();
-		j_c.name = $scope.companyinfo.name;
-		j_c.type = "comp";
-		j_c.children = $scope.hubsList.map(function traverse(o ) {
-				console.log(o.resourceName);
-				console.log(o.resourceId);
-			resourceService.getResources(o.resourceId).then(function(message) {
-                    console.log(message.data.data);
-            });
-
-            	for(var j in o.properties){
-					console.log(o.properties[j].resourcePropertyName);
-				}
-				        
-    			}
-		 
-			
-		)
-		return j_c;
-		
-	}
-	
-	
 	$scope.company = {
                 name: "Flexfelina",
                 type: "comp",
@@ -358,6 +372,7 @@ angular.module('uninova.rm.2')
                     ]
                 }]
             };
+*/
 
 })
 
