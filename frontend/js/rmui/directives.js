@@ -124,11 +124,15 @@ angular.module('uninova.rm.2')
                                 update(paths[i]);
                             }
                         }
+                   
                     }
-
-                    console.log(scope.company.name);
+                    console.log("ATUM");
+	    	
+		    var x = scope.company();
+                    console.log("ATUM");
+                    console.log(x);
                     //root = values;
-                    root = scope.company
+                    root = x
                     //values is the flare.json
                     select2_data = extract_select2_data(values, [], 0)[1]; //I know, not the prettiest...
                     root.x0 = height / 2;
