@@ -52,10 +52,11 @@ angular.module('uninova.rm.2')
 // directive que vai transformar o dom de workhistory
 //precisamos de esperar pela resolucao da promise de d3 service
 //usando o .then method
-.directive("workHistory",['d3Service', function(d3Service) {
+.directive("workHistory",['d3Service','$timeout', function(d3Service,timer) {
             return {
                 restrict: 'E',
                 link: function link(scope, el, attr) {
+		var getTree= function(){
 		 d3Service.d3().then(function(d3) {
                     var rectW = 60,
                         rectH = 30;
@@ -128,7 +129,7 @@ angular.module('uninova.rm.2')
                     }
                     console.log("ATUM");
 	    	
-		    var x = scope.company();
+		    var x = scope.company;
                     console.log("ATUM");
                     console.log(x);
                     //root = values;
@@ -348,14 +349,17 @@ angular.module('uninova.rm.2')
                             });
                         }
                         return [index, leaves];
+           
             }
-		 			})
+		 			}
+	
+)
+timer(getTree,10);	}
                 }
 
             }
 		}]
-        );
-
+        ); 
 
         var values = {
             "name": "flare",

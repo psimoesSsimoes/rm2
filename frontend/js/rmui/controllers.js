@@ -202,11 +202,10 @@ angular.module('uninova.rm.2')
         companyService.getCompany().then(function(message){
                 $scope.companyinfo = { id: $stateParams.companyid, name: message.data.data[0].resourceName };
 	
-        });
 
-        getAllHubs();
 
-        hubService.getHubTypes().then(function(message){
+
+        getAllHubs().then(hubService.getHubTypes().then(function(message){
             $scope.hubtypes = [];
             //to fill the new hub type select box
             angular.forEach(message.data.data, function(eachObj){
@@ -214,13 +213,16 @@ angular.module('uninova.rm.2')
                     $scope.hubtypes.push(eachObj);
                 }
             })
-        })
+        	$scope.company = getTree();
+	}));
+
+	})
 
 	// preencher scope.company retornando jc com 
 	// informacao sobre a companhia, hubs, resources, propriedades
 	// preencher scope.company retornando jc com 
 	// informacao sobre a companhia, hubs, resources, propriedades
-	$scope.company= function(){
+	var getTree= function(){
 		var j_c={};
 		j_c.name = $scope.companyinfo.name;
 		j_c.type = "comp";
